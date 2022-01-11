@@ -223,6 +223,7 @@ def download(
         with YoutubeDL(ytdl_opt) as ytdl:
             info = ytdl.extract_info(url, download=False)
             pretty_name = info["title"]
+            sanitized_title = sanitize_filename(pretty_name)
             sanitized_title = sanitized_title.strip(whitespace + '"\'')
 
             try:
