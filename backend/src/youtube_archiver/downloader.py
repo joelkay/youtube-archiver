@@ -14,6 +14,7 @@ from janus import Queue
 from youtube_dl import YoutubeDL
 from youtube_dl.postprocessor.ffmpeg import FFmpegMergerPP, encodeArgument, encodeFilename, prepend_extension
 from youtube_dl.utils import sanitize_filename
+from string import whitespace
 
 from .custom_types import DownloadedUpdate, DownloadingUpdate, DownloadResult, UpdateMessage, UpdateStatusCode
 
@@ -64,6 +65,7 @@ def process_output_dir(
 
     pretty_name = metadata["title"]
     sanitized_title = sanitize_filename(pretty_name)
+    sanitized_title = sanitized_title.strip(whitespace + '"\'')
 
     # This was touched during existence checks if subdirectories aren't being made.  If the file exists, it's fine.
     try:
@@ -221,7 +223,7 @@ def download(
         with YoutubeDL(ytdl_opt) as ytdl:
             info = ytdl.extract_info(url, download=False)
             pretty_name = info["title"]
-            sanitized_title = sanitize_filename(pretty_name)
+            sanitized_title = sanitized_title.strip(whitespace + '"\'')
 
             try:
                 if make_title_subdir:
