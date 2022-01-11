@@ -14,7 +14,6 @@ from janus import Queue
 from youtube_dl import YoutubeDL
 from youtube_dl.postprocessor.ffmpeg import FFmpegMergerPP, encodeArgument, encodeFilename, prepend_extension
 from youtube_dl.utils import sanitize_filename
-from string import whitespace
 
 from .custom_types import DownloadedUpdate, DownloadingUpdate, DownloadResult, UpdateMessage, UpdateStatusCode
 
@@ -37,6 +36,12 @@ class AlreadyDownloaded(RuntimeError):
         super().__init__(msg)
         self.key = key
 
+
+def resanitize_string(input_string):
+    for ch in [' ','\\','`','*','_','{','}','[',']','(',')','>','#','+','-','.','!','$','"','\'']:
+        if ch in input_string:
+            input_string = input_string.replace(ch,"")
+    return input_string
 
 def process_output_dir(
     download_dir: Path, output_dir: Path, download_video: bool, extract_audio: bool
@@ -65,7 +70,7 @@ def process_output_dir(
 
     pretty_name = metadata["title"]
     sanitized_title = sanitize_filename(pretty_name)
-    sanitized_title = sanitized_title.strip(whitespace + '"\'')
+    sanitized_title = resanitize_string(sanitized_title)
 
     # This was touched during existence checks if subdirectories aren't being made.  If the file exists, it's fine.
     try:
@@ -224,7 +229,7 @@ def download(
             info = ytdl.extract_info(url, download=False)
             pretty_name = info["title"]
             sanitized_title = sanitize_filename(pretty_name)
-            sanitized_title = sanitized_title.strip(whitespace + '"\'')
+            sanitized_title = resanitize_string(sanitized_title)
 
             try:
                 if make_title_subdir:
