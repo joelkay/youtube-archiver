@@ -24,5 +24,8 @@ COPY default_site /etc/nginx/sites-available/default
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 EXPOSE 8080
-COPY entrypoint.sh entrypoint.sh
-ENTRYPOINT "entrypoint.sh"
+
+ADD start.sh /
+RUN chmod +x /start.sh
+
+CMD bash start.sh
