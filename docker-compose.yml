@@ -1,7 +1,0 @@
-version: '3'
-services:
-
-  yt:
-    build: '.'
-    container_name: yt
-    restart: unless-stopped 
