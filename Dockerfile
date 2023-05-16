@@ -23,6 +23,10 @@ COPY frontend/src /var/www/html
 COPY default_site /etc/nginx/sites-available/default
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 
+# Establish the runtime user (with no password and no sudo)
+RUN useradd -m jbot
+USER myapp
+
 EXPOSE 8080
 
 ADD start.sh /
