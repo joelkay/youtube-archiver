@@ -25,7 +25,7 @@ COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 # Establish the runtime user (with no password and no sudo)
 RUN useradd -m jbot
-USER myapp
+USER jbot
 
 EXPOSE 8080
 
